@@ -7,8 +7,9 @@ from django.shortcuts import render
 from rest_framework.response import Response #Manda resposta em JSON
 from rest_framework.views import APIView 
 from api.model.Postagem import Postagem
-from api.model.Usuario import Usuario
-from .serializers import PostagemSerializer, UserSerializer
+from api.model.Comentario import Comentario
+#from api.model.Usuario import Usuario
+from .serializers import PostagemSerializer, UserSerializer, ComentarioSerializer
 from rest_framework import generics, status, viewsets
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import PermissionDenied
@@ -25,6 +26,15 @@ class PostagemViewSet(viewsets.ModelViewSet):
             return super().destroy(request, *args, **kwargs)
 
 
+class ComentarioViewSet(viewsets.ModelViewSet):
+    queryset = Comentario.objects.all()
+    serializer_class = ComentarioSerializer
+    
+    def destroy(self, request, *args, **kwargs):
+        comentario = Comentario.objects.get(pk=self.kwargs["pk"])
+        if not request.user == comentario.created_by:
+            raise PermissionDenied("Você não pode deletar esse comentario")
+            return super().destroy(request, *args, **kwargs)
 
 
 class UserCreate(generics.CreateAPIView):

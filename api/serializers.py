@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 from api.model.Postagem import Postagem
+from api.model.Comentario import Comentario
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
@@ -25,5 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
 class PostagemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Postagem
+        fields = '__all__'
+        
+
+class ComentarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comentario
         fields = '__all__'
 
