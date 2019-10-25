@@ -11,5 +11,3 @@ class Comentario(models.Model):
     descricao = models.TextField()
     data_criada = models.DateTimeField(default=timezone.now)
 
-def __str__(self):
-    return self.nome

@@ -8,8 +8,8 @@ from rest_framework.response import Response #Manda resposta em JSON
 from rest_framework.views import APIView 
 from api.model.Postagem import Postagem
 from api.model.Comentario import Comentario
-#from api.model.Usuario import Usuario
-from .serializers import PostagemSerializer, UserSerializer, ComentarioSerializer
+from api.model.Curtida import Curtida
+from .serializers import PostagemSerializer, UserSerializer, ComentarioSerializer, CurtidaSerializer
 from rest_framework import generics, status, viewsets
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import PermissionDenied
@@ -35,6 +35,18 @@ class ComentarioViewSet(viewsets.ModelViewSet):
         if not request.user == comentario.created_by:
             raise PermissionDenied("Você não pode deletar esse comentario")
             return super().destroy(request, *args, **kwargs)
+
+class CurtidaViewSet(viewsets.ModelViewSet):
+    queryset = Curtida.objects.all()
+    serializer_class = CurtidaSerializer
+    
+    def destroy(self, request, *args, **kwargs):
+        curtida = Curtida.objects.get(pk=self.kwargs["pk"])
+        if not request.user == curtida.created_by:
+            raise PermissionDenied("Você não pode descurtir esse post")
+            return super().destroy(request, *args, **kwargs)            
+
+
 
 
 class UserCreate(generics.CreateAPIView):

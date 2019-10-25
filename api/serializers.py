@@ -3,6 +3,7 @@
 from rest_framework import serializers
 from api.model.Postagem import Postagem
 from api.model.Comentario import Comentario
+from api.model.Curtida import Curtida
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
@@ -34,3 +35,7 @@ class ComentarioSerializer(serializers.ModelSerializer):
         model = Comentario
         fields = '__all__'
 
+class CurtidaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curtida
+        fields = '__all__'
