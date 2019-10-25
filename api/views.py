@@ -8,8 +8,9 @@ from rest_framework.response import Response #Manda resposta em JSON
 from rest_framework.views import APIView 
 from api.model.Postagem import Postagem
 from api.model.Comentario import Comentario
+from api.model.Retweet import Retweet
 from api.model.Curtida import Curtida
-from .serializers import PostagemSerializer, UserSerializer, ComentarioSerializer, CurtidaSerializer
+from .serializers import PostagemSerializer, UserSerializer, ComentarioSerializer, CurtidaSerializer, RetweetSerializer
 from rest_framework import generics, status, viewsets
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import PermissionDenied
@@ -46,6 +47,16 @@ class CurtidaViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("Você não pode descurtir esse post")
             return super().destroy(request, *args, **kwargs)            
 
+
+class RetweetViewSet(viewsets.ModelViewSet):
+    queryset = Retweet.objects.all()
+    serializer_class = RetweetSerializer
+    
+    def destroy(self, request, *args, **kwargs):
+        retweet = Retweet.objects.get(pk=self.kwargs["pk"])
+        if not request.user == retweet.created_by:
+            raise PermissionDenied("Você não pode 'desretweetar' esse post")
+            return super().destroy(request, *args, **kwargs) 
 
 
 
